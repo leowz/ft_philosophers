@@ -6,7 +6,7 @@
 #    By: zweng <zweng@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/19 12:41:50 by zweng             #+#    #+#              #
-#    Updated: 2023/04/11 18:55:07 by zweng            ###   ########.fr        #
+#    Updated: 2023/04/28 17:52:15 by zweng            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,10 +15,12 @@
 CC 				= gcc
 NAME 			= philo
 BONUS_NAME 		= philo_bonus
+LIB_NAME	 	= lib
 HEADER_PATH 	= $(NAME)/includes
 BHEADER_PATH	= $(BONUS_NAME)/includes
 C_PATH 			= $(NAME)/srcs
 BC_PATH 		= $(BONUS_NAME)/srcs
+LIB_PATH 		= $(LIB_NAME)
 OBJ_PATH		= obj/$(NAME)
 BOBJ_PATH		= obj/$(BONUS_NAME)
 
@@ -28,11 +30,14 @@ HEADER 			= $(HEADER_PATH)/$(NAME).h
 
 CFILES      	= $(notdir $(foreach D, $(C_PATH), $(wildcard $(D)/*.c)))
 BCFILES     	= $(notdir $(foreach D, $(BC_PATH), $(wildcard $(D)/*.c)))
+LIBCFILES     	= $(notdir $(foreach D, $(LIB_PATH), $(wildcard $(D)/*.c)))
 
 OBJS_NAME		= $(patsubst %.c, %.o, $(CFILES)) 
 BOBJS_NAME		= $(patsubst %.c, %.o, $(BCFILES)) 
+LIBOBJS_NAME	= $(patsubst %.c, %.o, $(LIBCFILES)) 
 DFILES_NAME		= $(patsubst %.c, %.d, $(CFILES)) 
 BDFILES_NAME	= $(patsubst %.c, %.d, $(BCFILES))
+LIBDFILES_NAME	= $(patsubst %.c, %.d, $(LIBCFILES))
 
 LDFLAGS 		= 
 
@@ -48,10 +53,13 @@ DEBUGF 			= #-fsanitize=address -g
 # ----- part automatic -----
 SRCS 		= $(addprefix $(C_PATH)/,$(CFILES)) 
 BSRCS 		= $(addprefix $(BC_PATH)/,$(BCFILES)) 
+LIBSRCS 	= $(addprefix $(LIB_PATH)/,$(LIBCFILES)) 
 OBJS 		= $(addprefix $(OBJ_PATH)/,$(OBJS_NAME))
 BOBJS 		= $(addprefix $(BOBJ_PATH)/,$(BOBJS_NAME))
+LIBOBJS 	= $(addprefix $(LIB_PATH)/,$(LIB_NAME))
 DFLS 		= $(addprefix $(OBJ_PATH)/,$(DFILES_NAME))
 BDFLS 		= $(addprefix $(BOBJ_PATH)/,$(BDFILES_NAME))
+LIBDFLS 	= $(addprefix $(LIB_PATH)/,$(LIBDFILES_NAME))
 
 # ----- Colors -----
 BLACK		:="\033[1;30m"
@@ -66,11 +74,11 @@ EOC			:="\033[0;0m"
 # ----- part rules -----
 all: $(NAME) $(BONUS_NAME)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(LIBOBJS)
 	@$(CC) $(OBJS) $(LDFLAGS) $(DEBUGF) -o $(NAME)/$@
 	@printf $(GREEN)"$(NAME) Finish linking\n"$(EOC)
 
-$(BONUS_NAME): $(BOBJS)
+$(BONUS_NAME): $(BOBJS) $(LIBOBJS)
 	@$(CC) $(BOBJS) $(LDFLAGS) $(DEBUGF) -o $(BONUS_NAME)/$@
 	@printf $(GREEN)"$(NAME) Finish linking\n"$(EOC)
 

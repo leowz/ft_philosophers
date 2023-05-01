@@ -6,7 +6,7 @@
 #    By: zweng <zweng@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/19 12:41:50 by zweng             #+#    #+#              #
-#    Updated: 2023/04/28 17:52:15 by zweng            ###   ########.fr        #
+#    Updated: 2023/05/01 16:35:25 by zweng            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,9 +44,9 @@ LDFLAGS 		=
 DPFLAGS 		= -MD -MP
 
 CFLAGS 			=  $(foreach D, $(HEADER_PATH), -I$(D)) $(DPFLAGS) \
-				   -Wall -Wextra -Werror 
+					-Wall -Wextra -Werror 
 BCFLAGS 		=  $(foreach D, $(BHEADER_PATH), -I$(D)) $(DPFLAGS) \
-				   -Wall -Wextra -Werror 
+					-Wall -Wextra -Werror 
 
 DEBUGF 			= #-fsanitize=address -g
 
@@ -56,7 +56,7 @@ BSRCS 		= $(addprefix $(BC_PATH)/,$(BCFILES))
 LIBSRCS 	= $(addprefix $(LIB_PATH)/,$(LIBCFILES)) 
 OBJS 		= $(addprefix $(OBJ_PATH)/,$(OBJS_NAME))
 BOBJS 		= $(addprefix $(BOBJ_PATH)/,$(BOBJS_NAME))
-LIBOBJS 	= $(addprefix $(LIB_PATH)/,$(LIB_NAME))
+LIBOBJS 	= $(addprefix $(LIB_PATH)/,$(LIBOBJS_NAME))
 DFLS 		= $(addprefix $(OBJ_PATH)/,$(DFILES_NAME))
 BDFLS 		= $(addprefix $(BOBJ_PATH)/,$(BDFILES_NAME))
 LIBDFLS 	= $(addprefix $(LIB_PATH)/,$(LIBDFILES_NAME))
@@ -75,11 +75,11 @@ EOC			:="\033[0;0m"
 all: $(NAME) $(BONUS_NAME)
 
 $(NAME): $(OBJS) $(LIBOBJS)
-	@$(CC) $(OBJS) $(LDFLAGS) $(DEBUGF) -o $(NAME)/$@
+	@$(CC) $(OBJS) $(LIBOBJS) $(LDFLAGS) $(DEBUGF) -o $(NAME)/$@
 	@printf $(GREEN)"$(NAME) Finish linking\n"$(EOC)
 
 $(BONUS_NAME): $(BOBJS) $(LIBOBJS)
-	@$(CC) $(BOBJS) $(LDFLAGS) $(DEBUGF) -o $(BONUS_NAME)/$@
+	@$(CC) $(BOBJS) $(LIBOBJS) $(LDFLAGS) $(DEBUGF) -o $(BONUS_NAME)/$@
 	@printf $(GREEN)"$(NAME) Finish linking\n"$(EOC)
 
 $(OBJ_PATH)/%.o:$(C_PATH)/%.c | $(OBJ_PATH)
@@ -97,7 +97,7 @@ $(BOBJ_PATH):
 	@mkdir -p $(BOBJ_PATH) 2> /dev/null
 
 clean: 
-	@rm -f $(OBJS) $(DFLS) $(BOBJS) $(BDFLS)
+	@rm -f $(OBJS) $(DFLS) $(BOBJS) $(BDFLS) $(LIBOBJS) $(LIBDFLS)
 	@rm -rf obj 2> /dev/null
 	@printf $(GREEN)"$(NAME) $(BONUS_NAME) clean\n"$(EOC)
 
@@ -108,6 +108,7 @@ fclean: clean
 
 -include $(DFILES)
 -include $(BDFILES)
+-include $(LIBDFILES)
 
 test:
 	echo $(arg1)

@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:26:14 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/01 16:26:57 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/03 14:54:32 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,10 @@
 
 typedef enum	e_status
 {
-	SLEEP;
-	EAT;
-	THINK;
-	DIED;
+	SLEEP,
+	EAT,
+	THINK,
+	DIED
 }				t_status;
 
 typedef struct	s_philo
@@ -40,5 +40,6 @@ typedef struct	s_philo
 
 
 int				ft_atoi(const char *str);
+int             solve_philosopher(int *params);
 
 #endif

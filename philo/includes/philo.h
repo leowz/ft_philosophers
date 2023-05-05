@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:26:14 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/03 14:54:32 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/04 17:55:20 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,45 @@
 # include <sys/time.h>
 # include <pthread.h>
 
-typedef enum	e_status
+typedef enum		e_status
 {
-	SLEEP,
-	EAT,
-	THINK,
-	DIED
-}				t_status;
+	SLEEPING,
+	EATING,
+	THINKING,
+	DEAD
+}					t_status;
 
-typedef struct	s_philo
+typedef struct		s_fork
 {
-	int			id;
-	int			time_to_die;
-	int			time_to_eat;
-	int			time_to_sleep;
-	int			eat_count;
-	t_status	status;
-}				t_philo;
+	unsigned int	owned_by;
+}					t_fork;
 
+typedef struct		s_philo
+{
+	unsigned int	id;
+	unsigned int	eat_count;
+	unsigned int	time_left;
+	unsigned int	fork_left;
+	unsigned int	fork_right;
+	t_status		status;
+	struct s_philo	*before;
+	struct s_philo	*next;
+    pthread_t   	thread_id;
+}					t_philo;
 
 int				ft_atoi(const char *str);
+void			ft_putstr(char const *str);
+
+int				*get_params(int params_get[5]);
+void			link_philo(t_philo *current, t_philo *next, t_philo *before);
 int             solve_philosopher(int *params);
+void			log_philo_msg(t_philo *philo, char *str);
+void			request_for_eating(t_philo *philo_ptr);
+void			ph_go_dead(t_philo *philo);
+void			ph_go_waiting(t_philo *philo);
+void			ph_go_eating(t_philo *philo);
+void			ph_go_sleeping(t_philo *philo);
+pthread_mutex_t *shared_lock(int init);
+void    		destroy_lock();
 
 #endif

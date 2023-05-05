@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:25:47 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/01 16:27:02 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/04 14:57:24 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ int		main(int ac, char **av)
 		params[3] = ft_atoi(av[4]);
 		if (ac >= 6)
 			params[4] = ft_atoi(av[5]);
+		(void)get_params(params);
 		return (solve_philosopher(params));
 	}
 }

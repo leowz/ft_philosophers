@@ -6,7 +6,7 @@
 #    By: zweng <zweng@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/19 12:41:50 by zweng             #+#    #+#              #
-#    Updated: 2023/05/03 17:41:46 by zweng            ###   ########.fr        #
+#    Updated: 2023/05/04 16:52:19 by zweng            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,12 +42,12 @@ DFILES_NAME		= $(patsubst %.c, %.d, $(CFILES))
 BDFILES_NAME	= $(patsubst %.c, %.d, $(BCFILES))
 LIBDFILES_NAME	= $(patsubst %.c, %.d, $(LIBCFILES))
 
-LDFLAGS 		= #-lpthread
+LDFLAGS 		= -lpthread
 
 DPFLAGS 		= -MD -MP 
 
 CFLAGS 			=  $(foreach D, $(HEADER_PATH), -I$(D)) $(DPFLAGS) \
-					-Wall -Wextra -Werror 
+					#-Wall -Wextra -Werror 
 BCFLAGS 		=  $(foreach D, $(BHEADER_PATH), -I$(D)) $(DPFLAGS) \
 					-Wall -Wextra -Werror 
 

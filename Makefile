@@ -6,7 +6,7 @@
 #    By: zweng <zweng@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/19 12:41:50 by zweng             #+#    #+#              #
-#    Updated: 2023/05/04 16:52:19 by zweng            ###   ########.fr        #
+#    Updated: 2023/05/09 16:50:23 by zweng            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,11 +47,11 @@ LDFLAGS 		= -lpthread
 DPFLAGS 		= -MD -MP 
 
 CFLAGS 			=  $(foreach D, $(HEADER_PATH), -I$(D)) $(DPFLAGS) \
-					#-Wall -Wextra -Werror 
+					-Wall -Wextra -Werror 
 BCFLAGS 		=  $(foreach D, $(BHEADER_PATH), -I$(D)) $(DPFLAGS) \
 					-Wall -Wextra -Werror 
 
-DEBUGF 			= #-fsanitize=address -g
+DEBUGF 			= -fsanitize=address -g
 
 # ----- part automatic -----
 SRCS 		= $(addprefix $(C_PATH)/,$(CFILES)) 

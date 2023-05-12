@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:25:47 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/04 14:57:24 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/09 17:32:31 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	usage()
 {
 	printf("usage: ./philo number_philosopers time_to_die ");
-	printf("time_to_eat time_to_sleep [number_philosopher_must_eat]");
+	printf("time_to_eat time_to_sleep [number_philosopher_must_eat]\n");
 }
 
 int		check_args(int ac, char **av)
@@ -30,6 +30,11 @@ int		check_args(int ac, char **av)
 			printf("Error: argument should be a positive number.\n");
 			return (0);
 		}
+		/*if (ft_atoi(av[1]) <= 1)
+		{
+			printf("Error: Need least 2 philosopher.\n");
+			return (0);
+		}*/
 		i ++;
 	}
 	return (1);

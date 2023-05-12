@@ -6,50 +6,61 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:28:28 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/04 17:12:59 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/10 18:32:13 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	ph_go_dead(t_philo *philo)
+int	ph_go_dead(t_philo *philo)
 {
 	if (!philo)
-		return ;
+		return (0);
 	philo->status = DEAD;
 	log_philo_msg(philo, "died");
+	return (1);
 }
 
-void	ph_go_waiting(t_philo *philo)
+int	ph_go_thinking(t_philo *philo)
 {
+	int				*params;
+	unsigned int	time_to_think;
+	
 	if (!philo)
-		return ;
+		return (0);
+	params = get_params(NULL);
 	philo->status = THINKING;
-	log_philo_msg(philo, "thinking");
-	usleep(1000);
+	log_philo_msg(philo, "is thinking");
+	time_to_think = (params[1] - 5) / 2; 
+	return (safe_msleep(philo, time_to_think));
 }
 
-void	ph_go_eating(t_philo *philo)
+int	ph_go_eating(t_philo *philo)
 {
 	int	*params;
 	
-	params = get_params(NULL);
 	if (!philo)
-		return ;
+		return (0);
+	params = get_params(NULL);
 	philo->status = EATING;
 	log_philo_msg(philo, "is eating");
-	usleep(1000 * params[2]);
-	ph_go_sleeping(philo);
+	philo->time_left += params[1];
+	if (safe_msleep(philo, params[2]))
+	{
+		philo_drop_forks(philo);
+		return (1);
+	}
+	return (0);
 }
 
-void	ph_go_sleeping(t_philo *philo)
+int	ph_go_sleeping(t_philo *philo)
 {
 	int	*params;
 	
 	params = get_params(NULL);
 	if (!philo)
-		return ;
+		return (0);
 	philo->status = SLEEPING;
 	log_philo_msg(philo, "is sleeping");
-	usleep(1000 * params[3]);
+	return (safe_msleep(philo, params[3]));
 }

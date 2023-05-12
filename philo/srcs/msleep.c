@@ -1,33 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   logger.c                                           :+:      :+:    :+:   */
+/*   msleep.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/04 14:16:46 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/10 17:53:03 by zweng            ###   ########.fr       */
+/*   Created: 2023/05/09 18:01:21 by zweng             #+#    #+#             */
+/*   Updated: 2023/05/10 19:00:26 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	log_philo_msg(t_philo *philo, char *str)
+int	safe_msleep(t_philo *philo, unsigned int ms)
 {
-	long            timestamp;
-
-	if (!philo || !str)
-		return ;
-	timestamp = get_timestamp();
-	printf("%ld %d %s\n", timestamp, philo->id, str);
-}
-
-long	get_timestamp(void)
-{
-	struct timeval  tv;
-	long            timestamp;
-
-	gettimeofday(&tv, NULL);
-	timestamp = (tv.tv_sec) * 1000 + (tv.tv_usec / 1000);
-	return (timestamp);
+	if (should_stop(0, 0))
+	{
+	
+		printf("should stop %d\n", should_stop(0, 0));
+		return (0);
+	}
+	while (ms && philo->time_left > 0)
+	{
+		usleep(1000);
+		ms--;
+	}
+	if (ms <= 0)
+		return (1);
+	else
+	{
+		if (!should_stop(0, 0))
+			should_stop(0, 1);
+		return (0);
+	}
 }

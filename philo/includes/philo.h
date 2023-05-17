@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:26:14 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/17 16:56:24 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/17 18:18:37 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int     		check_forks(t_philo *philo);
 void    		philo_take_forks(t_philo *philo);
 void    		philo_drop_forks(t_philo *philo);
 void    		destroy_forks(void);
-int				safe_usleep(t_philo *philo, long us, long last_ts, int ms_to_die);
+int				safe_usleep(t_philo *philo, long to_ts);
 int				should_stop(int init, int set_stop);
 void            log_philo_status(t_philo *philo);
 void			log_philo_msg_ts(t_philo *philo, char *str, long ts);

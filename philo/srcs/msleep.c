@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 18:01:21 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/17 17:16:01 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/17 18:21:40 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ long	time_to_live(t_philo *philo, long ms_to_die, long ts)
 	return (to_live);
 }
 
-long	count_down(t_philo *philo, long live_us, long current_ts, long last_ts)
+/*long	count_down(t_philo *philo, long current_ts, long to_ts, long last_ts)
 {
 	long	last_current_diff;	
 	long	cd;
@@ -38,35 +38,29 @@ long	count_down(t_philo *philo, long live_us, long current_ts, long last_ts)
 	//	printf("%d count down: %ld(%ld)\n", philo->id, cd, us);
 	//	printf("ts %ld, uts %ld\n", ts, last_ts);
 	}
-	return (cd);
-}
+	return (to_ts - current_ts);
+}*/
 
-int	safe_usleep(t_philo *philo, long us, long last_ts, int ms_to_die)
+int	safe_usleep(t_philo *philo, long to_ts)
 {
-	long	ts;
+	long	current_ts;
 	long	cd;
-	long	ttl;
+	long	interval;
 
 //	printf("enter usleep %d, us(%ld), last_ts(%ld), mtd(%d)\n", philo->id, us, last_ts, ms_to_die);
+
+	(void)philo;
+	interval = 101;
 	while (1)
 	{
-		ts = get_timestamp_us();
-		cd = count_down(philo, us, ts, last_ts);
-		ttl = time_to_live(philo, ms_to_die, ts);
-		if (cd > 0 && ttl > 0)
-			usleep(103);
+		current_ts = get_timestamp_us();
+		cd = to_ts - current_ts;
+		if (cd > 0)
+			usleep(interval);
 		else
 			break ;
 	}
 	//printf("break usleep\n");
 	//printf("%d time to live: %ld\n", philo->id, ttl);
-	if (ttl <= 0)
-	{
-		ph_go_dead(philo, ts);
-		if (!should_stop(0, 0))
-			should_stop(0 , 1);
-		return (0);
-	}
-	else
-		return (1);
+	return (1);
 }

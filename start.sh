@@ -173,7 +173,7 @@ if [ "$2" -eq 1 -o "$2" -eq 0 ];then
     echo "[============[Testing philo]==============]\n"
 
     target="philo"
-    make -C "$1/$target" > /dev/null
+#    make -C "$1/$target" > /dev/null
 
     if [ "$?" -ne 0 ];then
         echo "\n[+] There's a problem while compiling $target, please recheck your inputs"
@@ -201,7 +201,7 @@ if [ "$2" -eq 2 -o "$2" -eq 0 ];then
     echo "\n[============[Testing philo_bonus]==============]\n"
 
     target="philo_bonus"
-    make -C "$1/$target" > /dev/null
+#    make -C "$1/$target" > /dev/null
 
     if [ "$?" -ne 0 ];then
         echo "\n[+] There's a problem while compiling $target, please recheck your inputs"

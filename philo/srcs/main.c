@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:25:47 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/09 17:32:31 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/16 15:26:09 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ int		check_args(int ac, char **av)
 			printf("Error: argument should be a positive number.\n");
 			return (0);
 		}
-		/*if (ft_atoi(av[1]) <= 1)
+		if (ft_atoi(av[1]) <= 1)
 		{
 			printf("Error: Need least 2 philosopher.\n");
 			return (0);
-		}*/
+		}
 		i ++;
 	}
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:09:56 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/10 18:44:06 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/17 16:22:21 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,18 +47,13 @@ int		should_stop(int init, int set_stop)
 
 int		request_for_eating(t_philo *philo)
 {
-	pthread_mutex_t *lock;
 	int				ret;
 
-	lock = shared_lock(0);
 	if (!philo)
 		return (0);
-	pthread_mutex_lock(lock);
-	//log_philo_msg(philo, "requested for eating");
 	if (check_forks(philo))
 		ret = 1; // can eat;
 	else
 		ret = 0; // retry
-	pthread_mutex_unlock(lock);
 	return (ret);
 }

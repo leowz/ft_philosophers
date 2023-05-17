@@ -6,82 +6,84 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:26:48 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/10 18:44:29 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/17 16:56:40 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	init_philo(t_philo *philo, int index, int *params)
+void	init_philo(t_philo *philo, int index, long ts)
 {
-	//printf("init philo: %d\n", index);
 	philo->id = index + 1;
     philo->eat_count = 0;
-    philo->time_left = params[1];
-    philo->status = THINKING;
+    philo->last_sleep_begin = ts;
+    philo->last_sleep_end = ts;
+    philo->last_think_begin = ts;
+    philo->last_think_end = ts;
+    philo->last_eat_begin = ts;
+    philo->last_eat_end = ts;
+    philo->eat_times = 0;
+    philo->status = SLEEPING;
 	philo->before = NULL;
 	philo->next = NULL;
 	philo->fork_left_hand = NULL;
 	philo->fork_right_hand = NULL;
 }
 
-void	*timer_go(void *arg)
+int		need_stop(t_philo *philo, int eat_times)
 {
-    t_philo	*philo;
-	
-	philo = (t_philo *)arg;
-	//printf("%d timer start %lu\n", philo->id, get_timestamp());
-	while (philo->time_left > 0)
-	{
-		usleep(1000);
-		philo->time_left--;
-	}
-	ph_go_dead(philo);
-	return (NULL);
+	if (!philo)
+		return (1);
+	if (eat_times > 0 && philo->eat_times >= eat_times)
+		return (1);
+	else if (should_stop(0, 0))
+		return (1);
+	else
+		return (0);
 }
 
 void    *philosopher_go(void *arg)
 {
     t_philo	*philo;
-	int		can_eat;
+	int *pms;
+	long ts;
 	
 	philo = (t_philo *)arg;
-	//printf("%d philo created %lu\n", philo->id, get_timestamp());
-	pthread_create(&(philo->thread_timer_id), NULL, timer_go, philo);
-	while (1)
+	pms = get_params(NULL);
+	while (!need_stop(philo, pms[4]))
 	{
-		can_eat = request_for_eating(philo);
-		if (!can_eat)
+		ts = get_timestamp_us();
+		if (request_for_eating(philo))
 		{
-			if (!ph_go_thinking(philo))
+			if (ph_go_eating(philo, pms[2], pms[1], ts) &&
+					ph_go_sleeping(philo, pms[3], pms[1], get_timestamp_us()))
+				continue ;
+			else
 				break ;
-			continue ;
 		}
-		if (!ph_go_eating(philo))
-			break ;
-		if (!ph_go_sleeping(philo))
-			break ;
+		else
+			ph_go_thinking(philo, pms[1], ts);
 	}
-	pthread_join(philo->thread_timer_id, NULL);
 	return (NULL);
 }
 
-t_philo	*init_philo_table(int philo_nbr, int *params)
+t_philo	*init_philo_table(int philo_nbr)
 {
 	int		i;
 	t_philo	*ptr;
+	long	ts;
 
 	i = 0;
 	ptr = NULL;
-	//printf("philo_nbr %d\n", philo_nbr);
 	ptr = malloc(sizeof(t_philo) * philo_nbr);
 	(void)shared_lock(1);
 	(void)get_forks(philo_nbr);
+	ts = get_timestamp_us();
 	if (ptr)
 	{
 		while (i < philo_nbr)
 		{
-			init_philo(ptr + i, i, params);
+			init_philo(ptr + i, i, ts);
 			link_philo(ptr + i, ptr + ((i + 1) % philo_nbr),
 					ptr + ((i - 1 + philo_nbr) % philo_nbr));
 			i++;
@@ -109,7 +111,6 @@ void	create_threads(t_philo *f_philo)
 	ptr = f_philo;
     while (1)
     {
-		//printf("p create %u\n", ptr->id);
 		pthread_create(&(ptr->thread_id), NULL, philosopher_go, ptr);
 		ptr = ptr->next;
 		if (ptr == f_philo)
@@ -137,7 +138,7 @@ int		solve_philosopher(int *params)
 {
 	t_philo			*first_philo;
 
-	first_philo = init_philo_table(params[0], params);
+	first_philo = init_philo_table(params[0]);
 	should_stop(1, 0);
 	if (!first_philo)
 	{

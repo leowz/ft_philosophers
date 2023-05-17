@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 14:02:13 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/10 18:48:02 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/17 16:21:26 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,21 @@ void	destroy_forks(void)
 
 int		check_forks(t_philo *philo)
 {
-	t_philo *philo_left;
-	t_philo *philo_right;
+	t_philo 		*philo_left;
+	t_philo 		*philo_right;
+	pthread_mutex_t *lock;
+	int				ret;
 
+	lock = shared_lock(0);
 	philo_left = philo->before;
 	philo_right = philo->next;
+	pthread_mutex_lock(lock);
 	if (philo_left->status != EATING && philo_right->status != EATING)
-		return (1);
+		ret = 1;
 	else
-		return (0);
-		
-/*	if (!philo_left->fork_right_hand && !philo_right->fork_left_hand)
-		return (1);
-	return (0);*/
+		ret = 0;
+	pthread_mutex_unlock(lock);
+	return (ret);
 }
 
 void	philo_take_forks(t_philo *philo)
@@ -66,7 +68,6 @@ void	philo_take_forks(t_philo *philo)
 	philo_nbr = params[0];
 	philo->fork_left_hand = forks + philo->id - 1;
 	forks[philo->id - 1].owned_by = philo->id;
-	//log_philo_msg(philo, "has taken a fork");
 	if (philo->id == philo_nbr)
 	{
 		philo->fork_right_hand = forks;
@@ -77,7 +78,6 @@ void	philo_take_forks(t_philo *philo)
 		philo->fork_right_hand = forks + philo->id;
 		forks[philo->id].owned_by = philo->id;
 	}
-	//log_philo_msg(philo, "has taken a fork");
 }
 
 void	philo_drop_forks(t_philo *philo)
@@ -91,12 +91,10 @@ void	philo_drop_forks(t_philo *philo)
 	philo_nbr = params[0];
 	philo->fork_left_hand = NULL;
 	forks[philo->id - 1].owned_by = 0;
-//	log_philo_msg(philo, "has dropped a fork");
 	philo->fork_right_hand = NULL;
 	if (philo->id == philo_nbr)
 		forks[0].owned_by = 0;
 	else
 		forks[philo->id].owned_by = 0;
-//	log_philo_msg(philo, "has dropped a fork");
 }
 

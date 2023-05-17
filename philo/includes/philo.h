@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:26:14 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/11 11:16:21 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/17 16:56:24 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,13 @@ typedef struct		s_philo
 {
 	unsigned int	id;
 	unsigned int	eat_count;
-	unsigned int	time_left;
+	long			last_sleep_begin;
+	long			last_sleep_end;
+	long			last_think_begin;
+	long			last_think_end;
+	long			last_eat_begin;
+	long			last_eat_end;
+	int				eat_times;
 	t_fork			*fork_left_hand;
 	t_fork			*fork_right_hand;
 	t_status		status;
@@ -55,12 +61,12 @@ int				*get_params(int params_get[5]);
 void			link_philo(t_philo *current, t_philo *next, t_philo *before);
 int             solve_philosopher(int *params);
 void			log_philo_msg(t_philo *philo, char *str);
-long			get_timestamp(void);
+long			get_timestamp_us(void);
 int				request_for_eating(t_philo *philo_ptr);
-int				ph_go_dead(t_philo *philo);
-int				ph_go_thinking(t_philo *philo);
-int				ph_go_eating(t_philo *philo);
-int				ph_go_sleeping(t_philo *philo);
+int				ph_go_dead(t_philo *philo, long ts);
+int				ph_go_thinking(t_philo *philo, int ttd, long ts);
+int				ph_go_eating(t_philo *philo, int ms, int ttd, long ts);
+int				ph_go_sleeping(t_philo *philo, int ms, int ttd, long ts);
 pthread_mutex_t *shared_lock(int init);
 void    		destroy_lock();
 t_fork  		*get_forks(int nbr);
@@ -68,7 +74,9 @@ int     		check_forks(t_philo *philo);
 void    		philo_take_forks(t_philo *philo);
 void    		philo_drop_forks(t_philo *philo);
 void    		destroy_forks(void);
-int				safe_msleep(t_philo *philo, unsigned int ms);
+int				safe_usleep(t_philo *philo, long us, long last_ts, int ms_to_die);
 int				should_stop(int init, int set_stop);
+void            log_philo_status(t_philo *philo);
+void			log_philo_msg_ts(t_philo *philo, char *str, long ts);
 
 #endif

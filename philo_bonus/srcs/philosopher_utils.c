@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:28:28 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/18 14:32:23 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/18 17:48:15 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,9 @@ int	ph_go_dead(t_philo *philo, long ts)
 		return (0);
 	philo->status = DEAD;
 	log_philo_msg_ts(philo, "died", ts);
-	if (!should_stop(0, 0))
-		should_stop(0, 1);
+	sem_wait(philo->semaphore);
+	*philo->should_stop = 1;
+	sem_post(philo->semaphore);
 	return (0);
 }
 

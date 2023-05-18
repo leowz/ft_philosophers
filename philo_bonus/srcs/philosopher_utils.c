@@ -6,11 +6,11 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:28:28 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/18 14:59:45 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/18 14:32:23 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 int	ph_go_dead(t_philo *philo, long ts)
 {

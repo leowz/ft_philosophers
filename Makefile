@@ -6,7 +6,7 @@
 #    By: zweng <zweng@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/19 12:41:50 by zweng             #+#    #+#              #
-#    Updated: 2023/05/09 16:50:23 by zweng            ###   ########.fr        #
+#    Updated: 2023/05/18 14:31:11 by zweng            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -95,7 +95,7 @@ $(OBJ_PATH)/%.o:$(C_PATH)/%.c | $(OBJ_PATH)
 
 $(BOBJ_PATH)/%.o:$(BC_PATH)/%.c | $(BOBJ_PATH)
 	@printf $(GREEN)"compiling %s\n"$(EOC) $@
-	@$(CC) $(CFLAGS) -o $@ -c $<
+	@$(CC) $(BCFLAGS) -o $@ -c $<
 
 $(OBJ_PATH):
 	@mkdir -p $(OBJ_PATH) 2> /dev/null

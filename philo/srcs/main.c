@@ -6,19 +6,19 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:25:47 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/16 15:26:09 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/18 14:47:49 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	usage()
+void	usage(void)
 {
 	printf("usage: ./philo number_philosopers time_to_die ");
 	printf("time_to_eat time_to_sleep [number_philosopher_must_eat]\n");
 }
 
-int		check_args(int ac, char **av)
+int	check_args(int ac, char **av)
 {
 	int		i;
 
@@ -40,15 +40,15 @@ int		check_args(int ac, char **av)
 	return (1);
 }
 
-int		main(int ac, char **av)
+int	main(int ac, char **av)
 {
-	int params[5];
+	int	params[5];
 
 	if (ac < 5 || !check_args(ac, av))
 	{
 		usage();
-    	return (0);
-	} 
+		return (0);
+	}
 	else
 	{
 		memset(params, -1, sizeof(int) * 5);

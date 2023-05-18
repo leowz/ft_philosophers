@@ -6,16 +6,15 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:44:51 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/18 15:03:42 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/18 14:32:15 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-int	*get_params(int params_get[5])
+int		*get_params(int params_get[5])
 {
-	static int	params[5];
-
+	static int params[5];
 	if (params_get)
 	{
 		params[0] = params_get[0];
@@ -33,48 +32,4 @@ void	link_philo(t_philo *current, t_philo *next, t_philo *before)
 		current->next = next;
 	if (current && before)
 		current->before = before;
-}
-
-void	create_threads(t_philo *f_philo)
-{
-	t_philo			*ptr;
-
-	if (!f_philo)
-		return ;
-	ptr = f_philo;
-	while (1)
-	{
-		pthread_create(&(ptr->thread_id), NULL, philosopher_go, ptr);
-		ptr = ptr->next;
-		if (ptr == f_philo)
-			break ;
-	}
-}
-
-void	join_threads(t_philo *f_philo)
-{
-	t_philo			*ptr;
-
-	if (!f_philo)
-		return ;
-	ptr = f_philo;
-	while (1)
-	{
-		pthread_join(ptr->thread_id, NULL);
-		ptr = ptr->next;
-		if (ptr == f_philo)
-			break ;
-	}
-}
-
-int	need_stop(t_philo *philo, int eat_times)
-{
-	if (!philo)
-		return (1);
-	if (eat_times > 0 && philo->eat_times >= eat_times)
-		return (1);
-	else if (should_stop(0, 0))
-		return (1);
-	else
-		return (0);
 }

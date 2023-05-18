@@ -6,15 +6,15 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:16:46 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/18 14:46:22 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/18 14:31:55 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
 void	log_philo_msg(t_philo *philo, char *str)
 {
-	long	timestamp;
+	long            timestamp;
 
 	if (!philo || !str)
 		return ;
@@ -31,8 +31,8 @@ void	log_philo_msg_ts(t_philo *philo, char *str, long us)
 
 long	get_timestamp_us(void)
 {
-	struct timeval	tv;
-	long			timestamp;
+	struct timeval  tv;
+	long            timestamp;
 
 	gettimeofday(&tv, NULL);
 	timestamp = (tv.tv_sec) * 1000 * 1000 + (tv.tv_usec);

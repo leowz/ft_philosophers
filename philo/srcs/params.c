@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:44:51 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/18 15:03:42 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/19 23:21:03 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,13 @@ void	join_threads(t_philo *f_philo)
 	{
 		pthread_join(ptr->thread_id, NULL);
 		ptr = ptr->next;
+		pthread_mutex_destroy(&(ptr->lock));
 		if (ptr == f_philo)
 			break ;
 	}
 }
 
-int	need_stop(t_philo *philo, int eat_times)
+int	need_stop(t_philo *philo, unsigned int eat_times)
 {
 	if (!philo)
 		return (1);

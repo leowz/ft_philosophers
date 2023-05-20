@@ -6,7 +6,7 @@
 #    By: zweng <zweng@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/19 12:41:50 by zweng             #+#    #+#              #
-#    Updated: 2023/05/18 14:31:11 by zweng            ###   ########.fr        #
+#    Updated: 2023/05/20 07:37:48 by vagrant          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,9 +47,9 @@ LDFLAGS 		= -lpthread
 DPFLAGS 		= -MD -MP 
 
 CFLAGS 			=  $(foreach D, $(HEADER_PATH), -I$(D)) $(DPFLAGS) \
-					-Wall -Wextra -Werror 
+					# -Wall -Wextra -Werror 
 BCFLAGS 		=  $(foreach D, $(BHEADER_PATH), -I$(D)) $(DPFLAGS) \
-					-Wall -Wextra -Werror 
+					# -Wall -Wextra -Werror 
 
 DEBUGF 			= -fsanitize=address -g
 

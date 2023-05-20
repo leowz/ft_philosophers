@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:26:48 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/18 15:02:34 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/20 09:36:49 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,15 @@
 void	init_philo(t_philo *philo, int index, long ts)
 {
 	philo->id = index + 1;
-	philo->eat_count = 0;
 	philo->last_sleep_begin = ts;
 	philo->last_think_begin = ts;
 	philo->last_eat_begin = ts;
 	philo->eat_times = 0;
+	philo->fork	= -1;
 	philo->status = SLEEPING;
 	philo->before = NULL;
 	philo->next = NULL;
+	pthread_mutex_init(&(philo->lock), NULL);
 }
 
 void	*philosopher_go(void *arg)
@@ -33,7 +34,8 @@ void	*philosopher_go(void *arg)
 
 	philo = (t_philo *)arg;
 	pms = get_params(NULL);
-	while (!need_stop(philo, pms[4]))
+	log_philo_msg_ts(philo, "created", get_timestamp_us());
+	/*while (!need_stop(philo, pms[4]))
 	{
 		ts = get_timestamp_us();
 		if (request_for_eating(philo))
@@ -46,7 +48,7 @@ void	*philosopher_go(void *arg)
 		}
 		else
 			ph_go_thinking(philo, pms[1], ts);
-	}
+	}*/
 	return (NULL);
 }
 
@@ -59,7 +61,6 @@ t_philo	*init_philo_table(int philo_nbr)
 	i = 0;
 	ptr = NULL;
 	ptr = malloc(sizeof(t_philo) * philo_nbr);
-	(void)shared_lock(1);
 	ts = get_timestamp_us();
 	if (ptr)
 	{
@@ -76,12 +77,6 @@ t_philo	*init_philo_table(int philo_nbr)
 	return (ptr);
 }
 
-void	clean_up(t_philo *philo)
-{
-	free(philo);
-	destroy_lock();
-}
-
 int	solve_philosopher(int *params)
 {
 	t_philo			*first_philo;
@@ -95,6 +90,6 @@ int	solve_philosopher(int *params)
 	}
 	create_threads(first_philo);
 	join_threads(first_philo);
-	clean_up(first_philo);
+	free(first_philo);
 	return (0);
 }

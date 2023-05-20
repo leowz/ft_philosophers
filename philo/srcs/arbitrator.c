@@ -6,43 +6,37 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:09:56 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/18 14:44:35 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/19 22:40:24 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-pthread_mutex_t	*shared_lock(int init)
+/*pthread_mutex_t	*shared_lock(int init)
 {
 	static pthread_mutex_t	lock;
 
 	if (init)
 		pthread_mutex_init(&lock, NULL);
 	return (&lock);
-}
+}*/
 
-void	destroy_lock(void)
+void	destroy_lock(t_philo *philo)
 {
-	pthread_mutex_t	*lock;
-
-	lock = shared_lock(0);
-	pthread_mutex_destroy(lock);
+	if (philo)
+		pthread_mutex_destroy(&(philo->lock));
 }
 
 int	should_stop(int init, int set_stop)
 {
 	static int		stop;
-	pthread_mutex_t	*lock;
 
-	lock = shared_lock(0);
 	if (!init && !set_stop)
 		return (stop);
-	pthread_mutex_lock(lock);
 	if (init)
 		stop = 0;
 	if (set_stop)
 		stop = 1;
-	pthread_mutex_unlock(lock);
 	return (stop);
 }
 
@@ -52,7 +46,7 @@ int	request_for_eating(t_philo *philo)
 
 	if (!philo)
 		return (0);
-	if (check_forks(philo))
+	if (try_take_forks(philo))
 		ret = 1;
 	else
 		ret = 0;

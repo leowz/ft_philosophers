@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 18:01:21 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/18 14:35:14 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/20 00:35:29 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,20 @@ int	safe_usleep(t_philo *philo, long to_ts)
 	long	interval;
 
 	(void)philo;
-	interval = 101;
+	interval = 97;
 	while (1)
 	{
 		current_ts = get_timestamp_us();
 		cd = to_ts - current_ts;
-		if (cd > 0)
-			usleep(interval);
-		else
+		if (cd < 0)
 			break ;
+		if (cd > 0 && cd < interval)
+		{
+			usleep(cd);
+			break ;	
+		}
+		else
+			usleep(interval);
 	}
 	return (1);
 }

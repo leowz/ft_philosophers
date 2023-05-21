@@ -34,21 +34,24 @@ void	*philosopher_go(void *arg)
 
 	philo = (t_philo *)arg;
 	pms = get_params(NULL);
-	log_philo_msg_ts(philo, "created", get_timestamp_us());
-	/*while (!need_stop(philo, pms[4]))
+	while (!need_stop(philo, pms[4]))
 	{
 		ts = get_timestamp_us();
 		if (request_for_eating(philo))
 		{
-			if (ph_go_eating(philo, pms[2], pms[1], ts)
-				&& ph_go_sleeping(philo, pms[3], pms[1], get_timestamp_us()))
-				continue ;
+			if (!need_stop(philo, pms[4]) && ph_go_eating(philo, pms[2], pms[1], ts))
+			{
+				if (!need_stop(philo, pms[4]) && ph_go_sleeping(philo, pms[3], pms[1], get_timestamp_us()))
+					continue ;
+				else
+					break ;
+			}
 			else
 				break ;
 		}
 		else
 			ph_go_thinking(philo, pms[1], ts);
-	}*/
+	}
 	return (NULL);
 }
 
@@ -56,17 +59,15 @@ t_philo	*init_philo_table(int philo_nbr)
 {
 	int		i;
 	t_philo	*ptr;
-	long	ts;
 
 	i = 0;
 	ptr = NULL;
 	ptr = malloc(sizeof(t_philo) * philo_nbr);
-	ts = get_timestamp_us();
 	if (ptr)
 	{
 		while (i < philo_nbr)
 		{
-			init_philo(ptr + i, i, ts);
+			init_philo(ptr + i, i, get_timestamp_us());
 			link_philo(ptr + i, ptr + ((i + 1) % philo_nbr),
 				ptr + ((i - 1 + philo_nbr) % philo_nbr));
 			i++;

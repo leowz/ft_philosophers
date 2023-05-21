@@ -35,7 +35,7 @@ int	ph_go_thinking(t_philo *philo, int t_to_die, long ts)
 	us = 97;
 	philo->last_think_begin = ts;
 	usleep(us);
-	if (philo->last_think_begin + us - philo->last_eat_begin > t_to_die * 1000)
+	if (philo->last_think_begin + us - philo->last_eat_begin >= t_to_die * 1000)
 		return (ph_go_dead(philo, ts + us));
 	return (1);
 }
@@ -51,7 +51,7 @@ int	ph_go_eating(t_philo *philo, int ms, int t_to_die, long ts)
 	us = ms * 1000;
 	safe_usleep(philo, ts + us);
 	drop_forks(philo);
-	if (philo->last_eat_begin + us - philo->last_eat_begin > t_to_die * 1000)
+	if (philo->last_eat_begin + us - philo->last_eat_begin >= t_to_die * 1000)
 		return (ph_go_dead(philo, ts + us));
 	return (1);
 }
@@ -65,7 +65,7 @@ int	ph_go_sleeping(t_philo *philo, int ms, int t_to_die, long ts)
 	log_philo_msg_ts(philo, "is sleeping", ts);
 	us = ms * 1000;
 	safe_usleep(philo, ts + us);
-	if (philo->last_sleep_begin + us - philo->last_eat_begin > t_to_die * 1000)
+	if (philo->last_sleep_begin + us - philo->last_eat_begin >= t_to_die * 1000)
 		return (ph_go_dead(philo, ts + us));
 	return (1);
 }

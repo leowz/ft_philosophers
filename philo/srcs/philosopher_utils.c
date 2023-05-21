@@ -25,18 +25,22 @@ int	ph_go_dead(t_philo *philo, long ts)
 
 int	ph_go_thinking(t_philo *philo, int t_to_die, long ts)
 {
-	int		us;
-
 	if (philo->status != THINKING)
 	{
 		philo->status = THINKING;
+		philo->backoff = 11;
 		log_philo_msg_ts(philo, "is thinking", ts);
 	}
-	us = 97;
+	else
+	{
+		philo->backoff *= 3;
+		if (philo->backoff > 500)
+			philo->backoff = 491;
+	}
 	philo->last_think_begin = ts;
-	usleep(us);
-	if (philo->last_think_begin + us - philo->last_eat_begin >= t_to_die * 1000)
-		return (ph_go_dead(philo, ts + us));
+	usleep(philo->backoff);
+	if (philo->last_think_begin + philo->backoff - philo->last_eat_begin >= t_to_die * 1000)
+		return (ph_go_dead(philo, ts + philo->backoff));
 	return (1);
 }
 

@@ -51,6 +51,11 @@ static int	take_forks(t_philo *philo)
 	return (ret);
 }
 
+// int	should_take_fork(t_philo *philo)
+// {
+
+// }
+
 int	try_take_forks(t_philo *philo)
 {
 	int		ret;

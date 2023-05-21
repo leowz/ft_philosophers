@@ -18,6 +18,7 @@ void	init_philo(t_philo *philo, int index, long ts)
 	philo->last_sleep_begin = ts;
 	philo->last_think_begin = ts;
 	philo->last_eat_begin = ts;
+	philo->backoff = 0;
 	philo->eat_times = 0;
 	philo->fork	= -1;
 	philo->status = SLEEPING;
@@ -50,7 +51,12 @@ void	*philosopher_go(void *arg)
 				break ;
 		}
 		else
-			ph_go_thinking(philo, pms[1], ts);
+		{
+			if (!need_stop(philo, pms[4]) && ph_go_thinking(philo, pms[1], ts))
+				continue ;
+			else
+				break ;
+		}
 	}
 	return (NULL);
 }

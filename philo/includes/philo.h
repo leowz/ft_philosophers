@@ -37,6 +37,7 @@ typedef struct s_philo
 	long			last_sleep_begin;
 	long			last_think_begin;
 	long			last_eat_begin;
+	int				backoff;
 	t_status		status;
 	struct s_philo	*before;
 	struct s_philo	*next;

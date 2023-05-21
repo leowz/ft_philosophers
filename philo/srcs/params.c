@@ -12,21 +12,6 @@
 
 #include "philo.h"
 
-int	*get_params(int params_get[5])
-{
-	static int	params[5];
-
-	if (params_get)
-	{
-		params[0] = params_get[0];
-		params[1] = params_get[1];
-		params[2] = params_get[2];
-		params[3] = params_get[3];
-		params[4] = params_get[4];
-	}
-	return (params);
-}
-
 void	link_philo(t_philo *current, t_philo *next, t_philo *before)
 {
 	if (current && next)
@@ -68,12 +53,28 @@ void	join_threads(t_philo *f_philo)
 	}
 }
 
+int	should_stop(int init, int set_stop)
+{
+	static int		stop;
+
+	if (!init && !set_stop)
+		return (stop);
+	if (init)
+		stop = 0;
+	if (set_stop)
+		stop = 1;
+	return (stop);
+}
+
 int	need_stop(t_philo *philo, unsigned int eat_times)
 {
 	if (!philo)
 		return (1);
 	if (eat_times > 0 && philo->eat_times >= eat_times)
+	{
+		// printf("%d need to stop %d\n", philo->id, philo->eat_times);
 		return (1);
+	}
 	else if (should_stop(0, 0))
 		return (1);
 	else

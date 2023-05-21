@@ -12,32 +12,10 @@
 
 #include "philo.h"
 
-/*pthread_mutex_t	*shared_lock(int init)
-{
-	static pthread_mutex_t	lock;
-
-	if (init)
-		pthread_mutex_init(&lock, NULL);
-	return (&lock);
-}*/
-
 void	destroy_lock(t_philo *philo)
 {
 	if (philo)
 		pthread_mutex_destroy(&(philo->lock));
-}
-
-int	should_stop(int init, int set_stop)
-{
-	static int		stop;
-
-	if (!init && !set_stop)
-		return (stop);
-	if (init)
-		stop = 0;
-	if (set_stop)
-		stop = 1;
-	return (stop);
 }
 
 int	request_for_eating(t_philo *philo)

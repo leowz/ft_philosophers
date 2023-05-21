@@ -51,16 +51,25 @@ static int	take_forks(t_philo *philo)
 	return (ret);
 }
 
-// int	should_take_fork(t_philo *philo)
-// {
+int	should_take_fork(t_philo *philo)
+{
+	t_philo	*philo_right;
+	t_philo	*philo_left;
 
-// }
+	philo_left = philo->before;
+	philo_right = philo->next;
+	if (philo_left->status == THINKING && philo_left->last_eat_begin < philo->last_eat_begin)
+		return (0);
+	if (philo_right->status == THINKING && philo_right->last_eat_begin < philo->last_eat_begin)
+		return (0);
+	return (1);
+}
 
 int	try_take_forks(t_philo *philo)
 {
 	int		ret;
 
-	if (take_forks(philo))
+	if (should_take_fork(philo) && take_forks(philo))
 		ret = 1;
 	else
 		ret = 0;

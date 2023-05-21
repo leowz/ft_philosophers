@@ -53,7 +53,6 @@ int	main(int ac, char **av)
 		params[3] = ft_atoi(av[4]);
 		if (ac >= 6)
 			params[4] = ft_atoi(av[5]);
-		(void)get_params(params);
 		return (solve_philosopher(params));
 	}
 }

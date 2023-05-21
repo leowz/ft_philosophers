@@ -32,6 +32,7 @@ typedef enum e_status
 
 typedef struct s_philo
 {
+	int				*params;
 	unsigned int	id;
 	unsigned int	eat_times;
 	long			last_sleep_begin;

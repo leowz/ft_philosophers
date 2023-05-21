@@ -12,8 +12,9 @@
 
 #include "philo.h"
 
-void	init_philo(t_philo *philo, int index, long ts)
+void	init_philo(t_philo *philo, int index, long ts, int *params)
 {
+	philo->params = params;
 	philo->id = index + 1;
 	philo->last_sleep_begin = ts;
 	philo->last_think_begin = ts;
@@ -34,7 +35,7 @@ void	*philosopher_go(void *arg)
 	long	ts;
 
 	philo = (t_philo *)arg;
-	pms = get_params(NULL);
+	pms = philo->params;
 	while (!need_stop(philo, pms[4]))
 	{
 		ts = get_timestamp_us();
@@ -61,19 +62,21 @@ void	*philosopher_go(void *arg)
 	return (NULL);
 }
 
-t_philo	*init_philo_table(int philo_nbr)
+t_philo	*init_philo_table(int *params)
 {
 	int		i;
+	int		philo_nbr;
 	t_philo	*ptr;
 
 	i = 0;
 	ptr = NULL;
+	philo_nbr = params[0];
 	ptr = malloc(sizeof(t_philo) * philo_nbr);
 	if (ptr)
 	{
 		while (i < philo_nbr)
 		{
-			init_philo(ptr + i, i, get_timestamp_us());
+			init_philo(ptr + i, i, get_timestamp_us(), params);
 			link_philo(ptr + i, ptr + ((i + 1) % philo_nbr),
 				ptr + ((i - 1 + philo_nbr) % philo_nbr));
 			i++;
@@ -88,7 +91,7 @@ int	solve_philosopher(int *params)
 {
 	t_philo			*first_philo;
 
-	first_philo = init_philo_table(params[0]);
+	first_philo = init_philo_table(params);
 	should_stop(1, 0);
 	if (!first_philo)
 	{

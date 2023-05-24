@@ -30,11 +30,6 @@ int	check_args(int ac, char **av)
 			printf("Error: argument should be a positive number.\n");
 			return (0);
 		}
-		if (ft_atoi(av[1]) <= 1)
-		{
-			printf("Error: Need least 2 philosopher.\n");
-			return (0);
-		}
 		i ++;
 	}
 	return (1);
@@ -58,7 +53,6 @@ int	main(int ac, char **av)
 		params[3] = ft_atoi(av[4]);
 		if (ac >= 6)
 			params[4] = ft_atoi(av[5]);
-		(void)get_params(params);
 		return (solve_philosopher(params));
 	}
 }

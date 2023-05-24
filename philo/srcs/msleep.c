@@ -19,7 +19,7 @@ int	safe_usleep(t_philo *philo, long to_ts)
 	long	interval;
 
 	(void)philo;
-	interval = 97;
+	interval = 101;
 	while (1)
 	{
 		current_ts = get_timestamp_us();

@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-void	init_philo(t_philo *philo, int index, long ts, int *params)
+void	init_philo(t_philo *philo, int index, long ts, t_params *params)
 {
 	philo->params = params;
 	philo->id = index + 1;
@@ -20,6 +20,7 @@ void	init_philo(t_philo *philo, int index, long ts, int *params)
 	philo->last_think_begin = ts;
 	philo->last_eat_begin = ts;
 	philo->backoff = 0;
+	philo->ready = 0;
 	philo->eat_times = 0;
 	philo->fork	= -1;
 	philo->status = SLEEPING;
@@ -30,39 +31,32 @@ void	init_philo(t_philo *philo, int index, long ts, int *params)
 
 void	*philosopher_go(void *arg)
 {
-	t_philo	*philo;
-	int		*pms;
-	long	ts;
+	t_philo		*philo;
+	t_params	*pms;
+	long		ts;
 
 	philo = (t_philo *)arg;
 	pms = philo->params;
-	while (!need_stop(philo, pms[4]))
+	while (!pms->ready)
+		continue ;
+	while (!need_stop(philo))
 	{
 		ts = get_timestamp_us();
 		if (request_for_eating(philo))
 		{
-			if (!need_stop(philo, pms[4]) && ph_go_eating(philo, pms[2], pms[1], ts))
-			{
-				if (!need_stop(philo, pms[4]) && ph_go_sleeping(philo, pms[3], pms[1], get_timestamp_us()))
-					continue ;
-				else
-					break ;
-			}
-			else
-				break ;
-		}
-		else
-		{
-			if (!need_stop(philo, pms[4]) && ph_go_thinking(philo, pms[1], ts))
+			if (!need_stop(philo) && ph_go_eating(philo, ts) &&
+				!need_stop(philo) && ph_go_sleeping(philo,  get_timestamp_us()))
 				continue ;
 			else
 				break ;
 		}
+		if (need_stop(philo) || !ph_go_thinking(philo,  ts))
+			break ;
 	}
 	return (NULL);
 }
 
-t_philo	*init_philo_table(int *params)
+t_philo	*init_philo_table(t_params *params)
 {
 	int		i;
 	int		philo_nbr;
@@ -70,7 +64,7 @@ t_philo	*init_philo_table(int *params)
 
 	i = 0;
 	ptr = NULL;
-	philo_nbr = params[0];
+	philo_nbr = params->philo_nbr;
 	ptr = malloc(sizeof(t_philo) * philo_nbr);
 	if (ptr)
 	{
@@ -87,12 +81,11 @@ t_philo	*init_philo_table(int *params)
 	return (ptr);
 }
 
-int	solve_philosopher(int *params)
+int	solve_philosopher(t_params *params)
 {
 	t_philo			*first_philo;
 
 	first_philo = init_philo_table(params);
-	should_stop(1, 0);
 	if (!first_philo)
 	{
 		ft_putstr("Philosopher table initialisation failed!\n");

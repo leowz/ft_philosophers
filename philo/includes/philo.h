@@ -30,20 +30,34 @@ typedef enum e_status
 	DEAD
 }	t_status;
 
+typedef struct s_params
+{
+	int				philo_nbr;
+	int				ms_to_die;
+	int				ms_to_eat;
+	int				ms_to_sleep;
+	int				max_eat_times;
+	int				ready;
+	int				stop;
+	pthread_mutex_t death;
+}	t_params;
+
+
 typedef struct s_philo
 {
-	int				*params;
 	unsigned int	id;
 	unsigned int	eat_times;
 	long			last_sleep_begin;
 	long			last_think_begin;
 	long			last_eat_begin;
 	int				backoff;
+	int				ready;
 	t_status		status;
+	t_params		*params;
 	struct s_philo	*before;
 	struct s_philo	*next;
-	pthread_t		thread_id;
     int             fork;
+	pthread_t		thread_id;
     pthread_mutex_t lock;
 }	t_philo;
 
@@ -52,21 +66,21 @@ void			ft_putstr(char const *str);
 
 int				*get_params(int params_get[5]);
 void			link_philo(t_philo *current, t_philo *next, t_philo *before);
-int				solve_philosopher(int *params);
+int				solve_philosopher(t_params *params);
 long			get_timestamp_us(void);
 void			*philosopher_go(void *arg);
 int				request_for_eating(t_philo *philo_ptr);
 void			create_threads(t_philo *f_philo);
 void			join_threads(t_philo *f_philo);
 int				ph_go_dead(t_philo *philo, long ts);
-int				ph_go_thinking(t_philo *philo, int ttd, long ts);
-int				ph_go_eating(t_philo *philo, int ms, int ttd, long ts);
-int				ph_go_sleeping(t_philo *philo, int ms, int ttd, long ts);
+int				ph_go_thinking(t_philo *philo, long ts);
+int				ph_go_eating(t_philo *philo, long ts);
+int				ph_go_sleeping(t_philo *philo, long ts);
 void			destroy_lock(t_philo *philo);
 int				try_take_forks(t_philo *philo);
 void            drop_forks(t_philo *philo);
 int				safe_usleep(t_philo *philo, long to_ts);
-int				need_stop(t_philo *philo, unsigned int eat_times);
-int				should_stop(int init, int set_stop);
+int				need_stop(t_philo *philo);
 void			log_philo_msg_ts(t_philo *philo, char *str, long ts);
+void			log_philo_msg(t_philo *philo, char *str);
 #endif

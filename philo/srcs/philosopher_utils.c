@@ -15,12 +15,28 @@
 int	ph_go_dead(t_philo *philo, long ts)
 {
 	philo->status = DEAD;
-	log_philo_msg_ts(philo, "died", ts);
 	pthread_mutex_lock(&(philo->params->death));
 	if (!philo->params->stop)
 		philo->params->stop = 1;
 	pthread_mutex_unlock(&(philo->params->death));
+	log_philo_msg_ts(philo, "died", ts);
 	return (0);
+}
+
+void	cal_thinking_backoff_time(t_philo *philo, long ts)
+{
+	if (philo->status != THINKING)
+	{
+		philo->status = THINKING;
+		philo->backoff = 37;
+		log_philo_msg_ts(philo, "is thinking", ts);
+	}
+	else
+	{
+		philo->backoff *= 2;
+		if (philo->backoff > 501)
+			philo->backoff = 501;
+	}
 }
 
 int	ph_go_thinking(t_philo *philo, long ts)
@@ -28,18 +44,13 @@ int	ph_go_thinking(t_philo *philo, long ts)
 	int		t_to_die;
 
 	t_to_die = philo->params->ms_to_die;
-	if (philo->status != THINKING)
+	if (need_stop(philo))
 	{
-		philo->status = THINKING;
-		philo->backoff = 97;
-		log_philo_msg_ts(philo, "is thinking", ts);
+		if (ts - philo->last_eat_begin >= t_to_die * 1000)
+			ph_go_dead(philo, ts);
+		return (1);
 	}
-	else
-	{
-		philo->backoff *= 3;
-		if (philo->backoff > 991)
-			philo->backoff = 991;
-	}
+	cal_thinking_backoff_time(philo, ts);
 	philo->last_think_begin = ts;
 	usleep(philo->backoff);
 	if (philo->last_think_begin + philo->backoff - philo->last_eat_begin >= t_to_die * 1000)
@@ -52,6 +63,8 @@ int	ph_go_eating(t_philo *philo, long ts)
 	int		us;
 	int		t_to_die;
 
+	if (need_stop(philo))
+		return (0);
 	t_to_die = philo->params->ms_to_die;
 	philo->status = EATING;
 	philo->eat_times++;
@@ -70,6 +83,8 @@ int	ph_go_sleeping(t_philo *philo, long ts)
 	int		us;
 	int		t_to_die;
 
+	if (need_stop(philo))
+		return (0);
 	t_to_die = philo->params->ms_to_die;
 	philo->status = SLEEPING;
 	philo->last_sleep_begin = ts;

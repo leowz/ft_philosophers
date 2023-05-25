@@ -39,18 +39,18 @@ void	*philosopher_go(void *arg)
 	pms = philo->params;
 	while (!pms->ready)
 		continue ;
-	while (!need_stop(philo))
+	while (1)
 	{
 		ts = get_timestamp_us();
 		if (request_for_eating(philo))
 		{
-			if (!need_stop(philo) && ph_go_eating(philo, ts) &&
-				!need_stop(philo) && ph_go_sleeping(philo,  get_timestamp_us()))
+			if (ph_go_eating(philo, ts) &&
+					ph_go_sleeping(philo,  get_timestamp_us()))
 				continue ;
 			else
 				break ;
 		}
-		if (need_stop(philo) || !ph_go_thinking(philo,  ts))
+		if (!ph_go_thinking(philo,  ts))
 			break ;
 	}
 	return (NULL);

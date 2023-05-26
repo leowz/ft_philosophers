@@ -12,6 +12,15 @@
 
 #include "philo_bonus.h"
 
+void	clean_up(t_philo *philo, t_philo *first)
+{
+	sem_close(philo->params->death);
+	sem_close(philo->params->fork);
+	sem_unlink(SEM_DEATH);
+	sem_unlink(SEM_FORK);
+	free(first);
+}
+
 void	create_philos(t_philo *f_philo)
 {
 	t_philo			*ptr;
@@ -29,6 +38,7 @@ void	create_philos(t_philo *f_philo)
 		else if (pid == 0)
 		{
 			philosopher_go(ptr);
+			clean_up(ptr, f_philo);
 			exit(0);
 		}
 		ptr->pid = pid;

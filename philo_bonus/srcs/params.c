@@ -12,21 +12,6 @@
 
 #include "philo_bonus.h"
 
-int	*get_params(int params_get[5])
-{
-	static int	params[5];
-
-	if (params_get)
-	{
-		params[0] = params_get[0];
-		params[1] = params_get[1];
-		params[2] = params_get[2];
-		params[3] = params_get[3];
-		params[4] = params_get[4];
-	}
-	return (params);
-}
-
 void	link_philo(t_philo *current, t_philo *next, t_philo *before)
 {
 	if (current && next)

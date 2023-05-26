@@ -47,9 +47,9 @@ LDFLAGS 		= -lpthread
 DPFLAGS 		= -MD -MP 
 
 CFLAGS 			=  $(foreach D, $(HEADER_PATH), -I$(D)) $(DPFLAGS) \
-					# -Wall -Wextra -Werror 
+					 -Wall -Wextra -Werror 
 BCFLAGS 		=  $(foreach D, $(BHEADER_PATH), -I$(D)) $(DPFLAGS) \
-					# -Wall -Wextra -Werror 
+					 -Wall -Wextra -Werror 
 
 DEBUGF 			= -fsanitize=address -g
 

@@ -12,7 +12,7 @@
 
 #include "philo_bonus.h"
 
-void	init_philo(t_philo *philo, int index, long ts, t_philo *params)
+void	init_philo(t_philo *philo, int index, long ts, t_params *params)
 {
 	philo->params = params;
 	philo->id = index + 1;
@@ -27,19 +27,24 @@ void	init_philo(t_philo *philo, int index, long ts, t_philo *params)
 
 void	philosopher_go(t_philo *philo)
 {
-	long	ts;
+	// t_params	*pms;
 
+	// pms = philo->params;
+	// while (!pms->ready)
+	// 	continue ;
+	//printf("philo %u, created %ld\n", philo->id, get_timestamp_us() / 1000);
 	while (1)
 	{
-		ts = get_timestamp_us();
-		if (ph_go_eating(philo, ts) && ph_go_sleeping(philo, get_timestamp_us()))
+		if (ph_go_thinking(philo, get_timestamp_us()) &&
+				ph_go_eating(philo, get_timestamp_us()) &&
+				ph_go_sleeping(philo, get_timestamp_us()))
 			continue ;
 		else
 			break ;
 	}
 }
 
-t_philo	*init_philo_table(int *params)
+t_philo	*init_philo_table(t_params *params)
 {
 	int		i;
 	t_philo	*ptr;
@@ -48,8 +53,7 @@ t_philo	*init_philo_table(int *params)
 
 	i = 0;
 	ptr = NULL;
-	should_stop(1, 0);
-	philo_nbr = params[0];
+	philo_nbr = params->philo_nbr;
 	ptr = malloc(sizeof(t_philo) * philo_nbr);
 	ts = get_timestamp_us();
 	if (ptr)
@@ -73,11 +77,9 @@ int	log_return(char *msg, int ret)
 	return (ret);
 }
 
-int	solve_philosopher(int *params)
+int	solve_philosopher(t_params *params)
 {
 	t_philo	*first_philo;
-	int		nbr_forks;
-	int		should_stop;
 
 	first_philo = init_philo_table(params);
 	if (!first_philo)

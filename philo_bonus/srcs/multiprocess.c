@@ -43,7 +43,6 @@ void	parent_wait_philos(t_philo *f_philo)
 	t_philo	*ptr;
 	pid_t	pid;
 	int		status;
-	int		exit_status;
 
 	ptr = f_philo;
 	while (ptr)

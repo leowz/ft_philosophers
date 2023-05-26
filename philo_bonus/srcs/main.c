@@ -63,7 +63,7 @@ int	main(int ac, char **av)
 	}
 	else
 	{
-		init_params(av, &params);
+		init_params(&params, av);
 		if (params.fork == SEM_FAILED || params.death == SEM_FAILED)
 		{
 			printf("semaphore open error\n");

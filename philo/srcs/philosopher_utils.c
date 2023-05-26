@@ -48,7 +48,7 @@ int	ph_go_thinking(t_philo *philo, long ts)
 	{
 		if (ts - philo->last_eat_begin >= t_to_die * 1000)
 			ph_go_dead(philo, ts);
-		return (1);
+		return (0);
 	}
 	cal_thinking_backoff_time(philo, ts);
 	philo->last_think_begin = ts;

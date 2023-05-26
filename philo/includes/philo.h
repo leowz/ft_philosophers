@@ -46,7 +46,7 @@ typedef struct s_params
 typedef struct s_philo
 {
 	unsigned int	id;
-	unsigned int	eat_times;
+	int				eat_times;
 	long			last_sleep_begin;
 	long			last_think_begin;
 	long			last_eat_begin;

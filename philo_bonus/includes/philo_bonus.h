@@ -66,7 +66,7 @@ void			ft_putstr(char const *str);
 
 int				*get_params(int params_get[5]);
 void			link_philo(t_philo *current, t_philo *next, t_philo *before);
-int             solve_philosopher(int *params);
+int             solve_philosopher(t_params *params);
 void			log_philo_msg(t_philo *philo, char *str);
 long			get_timestamp_us(void);
 void			philosopher_go(t_philo *philo);
@@ -76,10 +76,10 @@ int				ph_go_eating(t_philo *philo, long ts);
 int				ph_go_sleeping(t_philo *philo, long ts);
 void			create_philos(t_philo *f_philo);
 void			parent_wait_philos(t_philo *f_philo);
-int				need_stop(t_philo *philo, int eat_times);
-int     		check_forks(t_philo *philo, int *forks);
+int				need_stop(t_philo *philo);
+void			get_forks(t_philo *philo);
+void			drop_forks(t_philo *philo);
 int				safe_usleep(t_philo *philo, long to_ts);
-int				should_stop(int init, int set_stop);
 void            log_philo_status(t_philo *philo);
 void			log_philo_msg_ts(t_philo *philo, char *str, long ts);
 

@@ -63,7 +63,7 @@ int	need_stop(t_philo *philo)
 	params = philo->params;
 	if (!philo)
 		return (1);
-	if (philo->eat_times >= params->max_eat_times)
+	if (params->max_eat_times > 0 && philo->eat_times >= params->max_eat_times)
 		return (1);
 	else if (params->stop)
 		return (1);

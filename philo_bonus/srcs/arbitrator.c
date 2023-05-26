@@ -12,44 +12,35 @@
 
 #include "philo_bonus.h"
 
-int	should_stop(int init, int set_stop)
+int	need_stop(t_philo *philo)
 {
-	static int		stop;
+	t_params	*params;
 
-	if (!init && !set_stop)
-		return (stop);
-	if (init)
-		stop = 0;
-	if (set_stop)
-		stop = 1;
-	return (stop);
-}
-
-int	check_forks(t_philo *philo, int *nbr_forks)
-{
-	int				ret;
-
-	sem_wait(philo->semaphore);
-	if (*nbr_forks >= 2)
-	{	
-		*nbr_forks -= 2;	
-		ret = 1;
-	}
-	else
-		ret = 0;
-	sem_post(philo->semaphore);
-	return (ret);
-}
-
-int	request_for_eating(t_philo *philo, int *nbr_forks)
-{
-	int				ret;
-
+	params = philo->params;
 	if (!philo)
-		return (0);
-	if (check_forks(philo, nbr_forks))
-		ret = 1;
+		return (1);
+	if (params->max_eat_times > 0 && philo->eat_times >= params->max_eat_times)
+		return (1);
+	else if (params->stop)
+		return (1);
 	else
-		ret = 0;
-	return (ret);
+		return (0);
+}
+
+void	get_forks(t_philo *philo)
+{
+	t_params	*params;
+
+	params = philo->params;
+	sem_wait(params->fork);
+	sem_wait(params->fork);
+}
+
+void	drop_forks(t_philo *philo)
+{
+	t_params	*params;
+
+	params = philo->params;
+	sem_post(params->fork);
+	sem_post(params->fork);
 }

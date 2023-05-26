@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:28:28 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/20 00:34:35 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/26 14:18:20 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,8 @@ int	ph_go_thinking(t_philo *philo, long ts)
 	cal_thinking_backoff_time(philo, ts);
 	philo->last_think_begin = ts;
 	usleep(philo->backoff);
-	if (philo->last_think_begin + philo->backoff - philo->last_eat_begin >= t_to_die * 1000)
+	if (philo->last_think_begin + philo->backoff
+		- philo->last_eat_begin >= t_to_die * 1000)
 		return (ph_go_dead(philo, ts + philo->backoff));
 	return (1);
 }

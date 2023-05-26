@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:26:48 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/20 09:36:49 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/26 14:22:07 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	init_philo(t_philo *philo, int index, long ts, t_params *params)
 	philo->backoff = 0;
 	philo->ready = 0;
 	philo->eat_times = 0;
-	philo->fork	= -1;
+	philo->fork = -1;
 	philo->status = SLEEPING;
 	philo->before = NULL;
 	philo->next = NULL;
@@ -44,13 +44,13 @@ void	*philosopher_go(void *arg)
 		ts = get_timestamp_us();
 		if (request_for_eating(philo))
 		{
-			if (ph_go_eating(philo, ts) &&
-					ph_go_sleeping(philo,  get_timestamp_us()))
+			if (ph_go_eating(philo, ts)
+				&& ph_go_sleeping(philo, get_timestamp_us()))
 				continue ;
 			else
 				break ;
 		}
-		if (!ph_go_thinking(philo,  ts))
+		if (!ph_go_thinking(philo, ts))
 			break ;
 	}
 	return (NULL);

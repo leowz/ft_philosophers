@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:26:14 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/19 21:16:23 by vagrant          ###   ########.fr       */
+/*   Updated: 2023/05/26 14:16:52 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,8 @@ typedef struct s_params
 	int				max_eat_times;
 	int				ready;
 	int				stop;
-	pthread_mutex_t death;
+	pthread_mutex_t	death;
 }	t_params;
-
 
 typedef struct s_philo
 {
@@ -56,9 +55,9 @@ typedef struct s_philo
 	t_params		*params;
 	struct s_philo	*before;
 	struct s_philo	*next;
-    int             fork;
+	int				fork;
 	pthread_t		thread_id;
-    pthread_mutex_t lock;
+	pthread_mutex_t	lock;
 }	t_philo;
 
 int				ft_atoi(const char *str);
@@ -78,7 +77,7 @@ int				ph_go_eating(t_philo *philo, long ts);
 int				ph_go_sleeping(t_philo *philo, long ts);
 void			destroy_lock(t_philo *philo);
 int				try_take_forks(t_philo *philo);
-void            drop_forks(t_philo *philo);
+void			drop_forks(t_philo *philo);
 int				safe_usleep(t_philo *philo, long to_ts);
 int				need_stop(t_philo *philo);
 void			log_philo_msg_ts(t_philo *philo, char *str, long ts);

@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 14:02:13 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/19 23:36:51 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/26 14:18:55 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,11 @@ int	should_take_fork(t_philo *philo)
 
 	philo_left = philo->before;
 	philo_right = philo->next;
-	if (philo_left->status == THINKING && philo_left->last_eat_begin < philo->last_eat_begin)
+	if (philo_left->status == THINKING
+		&& philo_left->last_eat_begin < philo->last_eat_begin)
 		return (0);
-	if (philo_right->status == THINKING && philo_right->last_eat_begin < philo->last_eat_begin)
+	if (philo_right->status == THINKING
+		&& philo_right->last_eat_begin < philo->last_eat_begin)
 		return (0);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 18:01:21 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/20 00:35:29 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/26 14:20:00 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	safe_usleep(t_philo *philo, long to_ts)
 		if (cd > 0 && cd < interval)
 		{
 			usleep(cd);
-			break ;	
+			break ;
 		}
 		else
 			usleep(interval);

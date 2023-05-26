@@ -35,9 +35,26 @@ int	check_args(int ac, char **av)
 	return (1);
 }
 
+void	init_params(t_params *params, char **av)
+{
+
+	params->philo_nbr = ft_atoi(av[1]);
+	params->ms_to_die = ft_atoi(av[2]);
+	params->ms_to_eat = ft_atoi(av[3]);
+	params->ms_to_sleep = ft_atoi(av[4]);
+	params->max_eat_times = -1;
+	params->ready = 0;
+	params->stop = 0;
+	sem_unlink(SEM_FORK);
+	sem_unlink(SEM_DEATH);
+	params->fork = sem_open(SEM_FORK, O_CREAT, 0644, params->philo_nbr);
+	params->death = sem_open(SEM_DEATH, O_CREAT, 0644, 1);
+
+}
+
 int	main(int ac, char **av)
 {
-	int	params[5];
+	t_params	params;
 
 	if (ac < 5 || !check_args(ac, av))
 	{
@@ -46,13 +63,14 @@ int	main(int ac, char **av)
 	}
 	else
 	{
-		memset(params, -1, sizeof(int) * 5);
-		params[0] = ft_atoi(av[1]);
-		params[1] = ft_atoi(av[2]);
-		params[2] = ft_atoi(av[3]);
-		params[3] = ft_atoi(av[4]);
+		init_params(av, &params);
+		if (params.fork == SEM_FAILED || params.death == SEM_FAILED)
+		{
+			printf("semaphore open error\n");
+			return (1);
+		}
 		if (ac >= 6)
-			params[4] = ft_atoi(av[5]);
-		return (solve_philosopher(params));
+			params.max_eat_times = ft_atoi(av[5]);
+		return (solve_philosopher(&params));
 	}
 }

@@ -12,11 +12,10 @@
 
 #include "philo_bonus.h"
 
-void	init_philo(t_philo *philo, int index, long ts, int *params)
+void	init_philo(t_philo *philo, int index, long ts, t_philo *params)
 {
 	philo->params = params;
 	philo->id = index + 1;
-	philo->eat_count = 0;
 	philo->last_sleep_begin = ts;
 	philo->last_think_begin = ts;
 	philo->last_eat_begin = ts;
@@ -26,38 +25,17 @@ void	init_philo(t_philo *philo, int index, long ts, int *params)
 	philo->next = NULL;
 }
 
-void	philosopher_go(t_philo *philo, int *nbr_forks)
+void	philosopher_go(t_philo *philo)
 {
-	int		*pms;
 	long	ts;
-	
 
-	pms = philo->params;
-	pid_t	pid = getpid();
-	// printf("children created %d\n", pid);
-	// printf("should stop %d\n", *philo->should_stop);
-	while (!(*philo->should_stop))
+	while (1)
 	{
 		ts = get_timestamp_us();
-		if (request_for_eating(philo, nbr_forks))
-		{
-			if (!(*philo->should_stop) && ph_go_eating(philo, pms[2], pms[1], ts))
-			{
-				if (!(*philo->should_stop) && ph_go_sleeping(philo, pms[3], pms[1], get_timestamp_us()))
-					continue ;
-				else
-					break ;
-			}
-			else
-				break ;
-		}
+		if (ph_go_eating(philo, ts) && ph_go_sleeping(philo, get_timestamp_us()))
+			continue ;
 		else
-		{
-			if (!(*philo->should_stop) && ph_go_thinking(philo, pms[1], ts))
-				continue ;
-			else
-				break ;
-		}
+			break ;
 	}
 }
 
@@ -98,25 +76,18 @@ int	log_return(char *msg, int ret)
 int	solve_philosopher(int *params)
 {
 	t_philo	*first_philo;
-	sem_t	*semaphore;
 	int		nbr_forks;
 	int		should_stop;
 
-	nbr_forks = params[0];
-	should_stop = 0;
-	semaphore = sem_open(SEM_NAME, O_CREAT, 0644, 1);
-    if (semaphore == SEM_FAILED) 
-	{
-		printf("semaphore open error\n");
-		return (1);
-	}
 	first_philo = init_philo_table(params);
 	if (!first_philo)
 		return log_return("Philosopher table initialisation failed!\n", 1);
-	create_philos(first_philo, &nbr_forks, &should_stop, semaphore);
+	create_philos(first_philo);
 	parent_wait_philos(first_philo);
 	free(first_philo);
-	sem_close(semaphore);
-	sem_unlink(SEM_NAME);
+	sem_close(first_philo->params->death);
+	sem_close(first_philo->params->fork);
+	sem_unlink(SEM_DEATH);
+	sem_unlink(SEM_FORK);
 	return (0);
 }

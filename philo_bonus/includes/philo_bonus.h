@@ -23,7 +23,8 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 
-# define SEM_NAME ("/fork_number")
+# define SEM_FORK ("/fork")
+# define SEM_DEATH ("/DEATH")
 
 typedef enum		e_status
 {
@@ -33,21 +34,31 @@ typedef enum		e_status
 	DEAD
 }					t_status;
 
+typedef struct s_params
+{
+	int				philo_nbr;
+	int				ms_to_die;
+	int				ms_to_eat;
+	int				ms_to_sleep;
+	int				max_eat_times;
+	int				ready;
+	int				stop;
+	sem_t			*fork;
+	sem_t			*death;
+}	t_params;
+
 typedef struct		s_philo
 {
-	int				*params;
 	unsigned int	id;
-	unsigned int	eat_count;
 	long			last_sleep_begin;
 	long			last_think_begin;
 	long			last_eat_begin;
 	int				eat_times;
 	t_status		status;
+	t_params		*params;
 	struct s_philo	*before;
 	struct s_philo	*next;
-	sem_t			*semaphore;
 	pid_t			pid;
-	int				*should_stop;
 }					t_philo;
 
 int				ft_atoi(const char *str);
@@ -58,14 +69,12 @@ void			link_philo(t_philo *current, t_philo *next, t_philo *before);
 int             solve_philosopher(int *params);
 void			log_philo_msg(t_philo *philo, char *str);
 long			get_timestamp_us(void);
-void			philosopher_go(t_philo *philo, int *nbr_forks);
-int				request_for_eating(t_philo *philo_ptr, int *forks);
+void			philosopher_go(t_philo *philo);
 int				ph_go_dead(t_philo *philo, long ts);
-int				ph_go_thinking(t_philo *philo, int ttd, long ts);
-int				ph_go_eating(t_philo *philo, int ms, int ttd, long ts);
-int				ph_go_sleeping(t_philo *philo, int ms, int ttd, long ts);
-void			create_philos(t_philo *f_philo, int *nbr_forks, int *stop,
-					sem_t *semaphore);
+int				ph_go_thinking(t_philo *philo, long ts);
+int				ph_go_eating(t_philo *philo, long ts);
+int				ph_go_sleeping(t_philo *philo, long ts);
+void			create_philos(t_philo *f_philo);
 void			parent_wait_philos(t_philo *f_philo);
 int				need_stop(t_philo *philo, int eat_times);
 int     		check_forks(t_philo *philo, int *forks);

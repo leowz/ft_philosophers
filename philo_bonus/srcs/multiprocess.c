@@ -12,8 +12,7 @@
 
 #include "philo_bonus.h"
 
-void	create_philos(t_philo *f_philo, int *nbr_forks, int *should_stop, 
-		sem_t *semaphore)
+void	create_philos(t_philo *f_philo)
 {
 	t_philo			*ptr;
 	pid_t			pid;
@@ -29,12 +28,9 @@ void	create_philos(t_philo *f_philo, int *nbr_forks, int *should_stop,
 		}
 		else if (pid == 0)
 		{
-			ptr->semaphore = semaphore;
-			ptr->should_stop = should_stop;
-			philosopher_go(ptr, nbr_forks);
+			philosopher_go(ptr);
 			exit(0);
 		}
-		// master process logic
 		ptr->pid = pid; 
 		ptr = ptr->next;
 		if (ptr == f_philo)
@@ -55,11 +51,6 @@ void	parent_wait_philos(t_philo *f_philo)
 		pid = waitpid(ptr->pid, &status, 0);
 		if (pid == -1)
 			printf("Error when waiting for child pcs.\n");
-		else
-		{
-			exit_status = WEXITSTATUS(status);
-			printf("%d exit status %d\n", pid, exit_status);
-		}
 		ptr = ptr->next;
 		if (ptr == f_philo)
 			break ;

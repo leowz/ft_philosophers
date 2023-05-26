@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 14:17:32 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/18 17:50:54 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/26 16:28:23 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@
 # define SEM_FORK ("/fork")
 # define SEM_DEATH ("/DEATH")
 
-typedef enum		e_status
+typedef enum e_status
 {
 	SLEEPING,
 	EATING,
 	THINKING,
 	DEAD
-}					t_status;
+}	t_status;
 
 typedef struct s_params
 {
@@ -47,7 +47,7 @@ typedef struct s_params
 	sem_t			*death;
 }	t_params;
 
-typedef struct		s_philo
+typedef struct s_philo
 {
 	unsigned int	id;
 	long			last_sleep_begin;
@@ -66,7 +66,7 @@ void			ft_putstr(char const *str);
 
 int				*get_params(int params_get[5]);
 void			link_philo(t_philo *current, t_philo *next, t_philo *before);
-int             solve_philosopher(t_params *params);
+int				solve_philosopher(t_params *params);
 void			log_philo_msg(t_philo *philo, char *str);
 long			get_timestamp_us(void);
 void			philosopher_go(t_philo *philo);
@@ -80,7 +80,7 @@ int				need_stop(t_philo *philo);
 void			get_forks(t_philo *philo);
 void			drop_forks(t_philo *philo);
 int				safe_usleep(t_philo *philo, long to_ts);
-void            log_philo_status(t_philo *philo);
+void			log_philo_status(t_philo *philo);
 void			log_philo_msg_ts(t_philo *philo, char *str, long ts);
 
 #endif

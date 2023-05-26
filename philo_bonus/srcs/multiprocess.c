@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/22 13:42:31 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/22 13:42:47 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/26 16:25:57 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	create_philos(t_philo *f_philo)
 	ptr = f_philo;
 	while (ptr)
 	{
-		pid = fork();	
+		pid = fork();
 		if (pid < 0)
 		{
 			printf("create philo %d failed\n", ptr->id);
@@ -31,7 +31,7 @@ void	create_philos(t_philo *f_philo)
 			philosopher_go(ptr);
 			exit(0);
 		}
-		ptr->pid = pid; 
+		ptr->pid = pid;
 		ptr = ptr->next;
 		if (ptr == f_philo)
 			break ;
@@ -55,4 +55,3 @@ void	parent_wait_philos(t_philo *f_philo)
 			break ;
 	}
 }
-

@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:44:51 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/18 17:50:56 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/26 16:26:26 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,5 +34,3 @@ void	link_philo(t_philo *current, t_philo *next, t_philo *before)
 	if (current && before)
 		current->before = before;
 }
-
-

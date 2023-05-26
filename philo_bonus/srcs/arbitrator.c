@@ -33,7 +33,9 @@ void	get_forks(t_philo *philo)
 
 	params = philo->params;
 	sem_wait(params->fork);
+	log_philo_msg(philo, "has taken a fork");
 	sem_wait(params->fork);
+	log_philo_msg(philo, "has taken a fork");
 }
 
 void	drop_forks(t_philo *philo)

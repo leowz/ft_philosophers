@@ -6,9 +6,17 @@
 /*   By: zweng <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/09 17:00:58 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/01 11:45:09 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/26 16:31:43 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+static int	tenary(int value, int ret1, int ret2)
+{
+	if (value)
+		return (ret1);
+	else
+		return (ret2);
+}
 
 int	ft_atoi(const char *str)
 {
@@ -24,7 +32,7 @@ int	ft_atoi(const char *str)
 		== '\f' || *str == '\r')
 		str++;
 	if (*str == '-' || *str == '+')
-		sign = *str++ == '-' ? 1 : 0;
+		sign = tenary(*str++ == '-', 1, 0);
 	while (1 && i < 20)
 	{
 		digit = *str++ - '0';
@@ -34,6 +42,6 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	if (sign)
-		return (i < 20 ? -ret : 0);
-	return (i < 20 ? ret : -1);
+		return (tenary(i < 20, -ret, 0));
+	return (tenary(i < 20, ret, -1));
 }

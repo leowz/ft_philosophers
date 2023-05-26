@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/01 15:26:48 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/18 17:49:17 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/26 16:27:04 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,11 @@ void	init_philo(t_philo *philo, int index, long ts, t_params *params)
 
 void	philosopher_go(t_philo *philo)
 {
-	// t_params	*pms;
-
-	// pms = philo->params;
-	// while (!pms->ready)
-	// 	continue ;
-	//printf("philo %u, created %ld\n", philo->id, get_timestamp_us() / 1000);
 	while (1)
 	{
-		if (ph_go_thinking(philo, get_timestamp_us()) &&
-				ph_go_eating(philo, get_timestamp_us()) &&
-				ph_go_sleeping(philo, get_timestamp_us()))
+		if (ph_go_thinking(philo, get_timestamp_us())
+			&& ph_go_eating(philo, get_timestamp_us())
+			&& ph_go_sleeping(philo, get_timestamp_us()))
 			continue ;
 		else
 			break ;
@@ -83,7 +77,7 @@ int	solve_philosopher(t_params *params)
 
 	first_philo = init_philo_table(params);
 	if (!first_philo)
-		return log_return("Philosopher table initialisation failed!\n", 1);
+		return (log_return("Philosopher table initialisation failed!\n", 1));
 	create_philos(first_philo);
 	parent_wait_philos(first_philo);
 	free(first_philo);

@@ -27,9 +27,10 @@ int	ph_go_dead(t_philo *philo, long ts)
 int	ph_go_thinking(t_philo *philo, long ts)
 {
 	int		t_to_die;
+	long	new_ts;
 
 	t_to_die = philo->params->ms_to_die;
-	if (need_stop(philo))
+	if (need_stop(philo) || (ts - philo->last_eat_begin >= t_to_die * 1000))
 	{
 		if (ts - philo->last_eat_begin >= t_to_die * 1000)
 			ph_go_dead(philo, ts);
@@ -41,7 +42,13 @@ int	ph_go_thinking(t_philo *philo, long ts)
 		log_philo_msg_ts(philo, "is thinking", ts);
 	}
 	philo->last_think_begin = ts;
+	new_ts = get_timestamp_us();
 	get_forks(philo);
+	if (new_ts - philo->last_eat_begin >= t_to_die * 1000)
+	{
+		drop_forks(philo);
+		return (ph_go_dead(philo, new_ts));
+	}
 	return (1);
 }
 
@@ -51,7 +58,15 @@ int	ph_go_eating(t_philo *philo, long ts)
 	int		t_to_die;
 
 	t_to_die = philo->params->ms_to_die;
-	t_to_die = philo->params->ms_to_die;
+	if (need_stop(philo) || (ts - philo->last_eat_begin >= t_to_die * 1000))
+	{
+		if (ts - philo->last_eat_begin >= t_to_die * 1000)
+		{
+			drop_forks(philo);
+			ph_go_dead(philo, ts);
+		}
+		return (0);
+	}
 	philo->status = EATING;
 	philo->eat_times++;
 	philo->last_eat_begin = ts;
@@ -70,6 +85,12 @@ int	ph_go_sleeping(t_philo *philo, long ts)
 	int		t_to_die;
 
 	t_to_die = philo->params->ms_to_die;
+	if (need_stop(philo) || (ts - philo->last_eat_begin >= t_to_die * 1000))
+	{
+		if (ts - philo->last_eat_begin >= t_to_die * 1000)
+			ph_go_dead(philo, ts);
+		return (0);
+	}
 	philo->status = SLEEPING;
 	philo->last_sleep_begin = ts;
 	log_philo_msg_ts(philo, "is sleeping", ts);

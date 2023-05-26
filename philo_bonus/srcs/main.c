@@ -6,7 +6,7 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:25:47 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/18 15:30:52 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/26 16:26:16 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,11 @@ int	check_args(int ac, char **av)
 			printf("Error: argument should be a positive number.\n");
 			return (0);
 		}
+		if (ft_atoi(av[1]) <= 1)
+		{
+			printf("Error: philo number should bigger than 1.\n");
+			return (0);
+		}
 		i ++;
 	}
 	return (1);
@@ -37,7 +42,6 @@ int	check_args(int ac, char **av)
 
 void	init_params(t_params *params, char **av)
 {
-
 	params->philo_nbr = ft_atoi(av[1]);
 	params->ms_to_die = ft_atoi(av[2]);
 	params->ms_to_eat = ft_atoi(av[3]);
@@ -49,7 +53,6 @@ void	init_params(t_params *params, char **av)
 	sem_unlink(SEM_DEATH);
 	params->fork = sem_open(SEM_FORK, O_CREAT, 0644, params->philo_nbr);
 	params->death = sem_open(SEM_DEATH, O_CREAT, 0644, 1);
-
 }
 
 int	main(int ac, char **av)

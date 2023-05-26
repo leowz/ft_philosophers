@@ -42,7 +42,9 @@ static int	take_forks(t_philo *philo)
 		if (philo->fork == NOT_TAKEN && philo_right->fork == NOT_TAKEN)
 		{
 			philo->fork = philo->id;
+			log_philo_msg(philo, "has taken a fork");
 			philo_right->fork = philo->id;
+			log_philo_msg(philo, "has taken a fork");
 			ret = 1;
 		}
 		pthread_mutex_unlock(&(philo->lock));

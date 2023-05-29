@@ -14,20 +14,27 @@
 
 int	safe_usleep(t_philo *philo, long to_ts)
 {
-	long	current_ts;
-	long	cd;
-	long	interval;
+	long		current_ts;
+	long		cd;
+	long		interval;
+	t_params	*params;
 
-	(void)philo;
 	interval = 101;
+	params = philo->params;
 	while (1)
 	{
 		current_ts = get_timestamp_us();
 		cd = to_ts - current_ts;
-		if (cd > 0)
-			usleep(interval);
-		else
+		if (cd < 0 || (current_ts - philo->last_eat_begin
+			>= 1000 * params->ms_to_die))
 			break ;
+		if (cd > 0 && cd < interval)
+		{
+			usleep(cd);
+			break ;
+		}
+		else
+			usleep(interval);
 	}
 	return (1);
 }

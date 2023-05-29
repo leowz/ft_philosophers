@@ -32,12 +32,12 @@ void	get_forks(t_philo *philo)
 	t_params	*params;
 
 	params = philo->params;
-	if (philo->id % 2 == 0)
-		usleep(300);
+	sem_wait(params->arbitrator);
 	sem_wait(params->fork);
 	log_philo_msg(philo, "has taken a fork");
 	sem_wait(params->fork);
 	log_philo_msg(philo, "has taken a fork");
+	sem_post(params->arbitrator);
 }
 
 void	drop_forks(t_philo *philo)

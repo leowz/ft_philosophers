@@ -71,7 +71,7 @@ void			*philosopher_go(void *arg);
 int				request_for_eating(t_philo *philo_ptr);
 void			create_threads(t_philo *f_philo);
 void			join_threads(t_philo *f_philo);
-int				ph_go_dead(t_philo *philo, long ts);
+int				ph_go_dead(t_philo *philo);
 int				ph_go_thinking(t_philo *philo, long ts);
 int				ph_go_eating(t_philo *philo, long ts);
 int				ph_go_sleeping(t_philo *philo, long ts);

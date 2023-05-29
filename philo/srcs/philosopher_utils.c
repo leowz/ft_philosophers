@@ -6,20 +6,20 @@
 /*   By: zweng <zweng@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 14:28:28 by zweng             #+#    #+#             */
-/*   Updated: 2023/05/26 14:18:20 by zweng            ###   ########.fr       */
+/*   Updated: 2023/05/20 00:34:35 by zweng            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	ph_go_dead(t_philo *philo, long ts)
+int	ph_go_dead(t_philo *philo)
 {
 	philo->status = DEAD;
 	pthread_mutex_lock(&(philo->params->death));
 	if (!philo->params->stop)
 		philo->params->stop = 1;
 	pthread_mutex_unlock(&(philo->params->death));
-	log_philo_msg_ts(philo, "died", ts);
+	log_philo_msg_ts(philo, "died", get_timestamp_us());
 	return (0);
 }
 
@@ -47,15 +47,14 @@ int	ph_go_thinking(t_philo *philo, long ts)
 	if (need_stop(philo))
 	{
 		if (ts - philo->last_eat_begin >= t_to_die * 1000)
-			ph_go_dead(philo, ts);
+			ph_go_dead(philo);
 		return (0);
 	}
 	cal_thinking_backoff_time(philo, ts);
 	philo->last_think_begin = ts;
 	usleep(philo->backoff);
-	if (philo->last_think_begin + philo->backoff
-		- philo->last_eat_begin >= t_to_die * 1000)
-		return (ph_go_dead(philo, ts + philo->backoff));
+	if (philo->last_think_begin + philo->backoff - philo->last_eat_begin >= t_to_die * 1000)
+		return (ph_go_dead(philo));
 	return (1);
 }
 
@@ -75,7 +74,7 @@ int	ph_go_eating(t_philo *philo, long ts)
 	safe_usleep(philo, ts + us);
 	drop_forks(philo);
 	if (philo->last_eat_begin + us - philo->last_eat_begin >= t_to_die * 1000)
-		return (ph_go_dead(philo, ts + us));
+		return (ph_go_dead(philo));
 	return (1);
 }
 
@@ -93,6 +92,6 @@ int	ph_go_sleeping(t_philo *philo, long ts)
 	us = philo->params->ms_to_sleep * 1000;
 	safe_usleep(philo, ts + us);
 	if (philo->last_sleep_begin + us - philo->last_eat_begin >= t_to_die * 1000)
-		return (ph_go_dead(philo, ts + us));
+		return (ph_go_dead(philo));
 	return (1);
 }

@@ -80,10 +80,6 @@ int	solve_philosopher(t_params *params)
 		return (log_return("Philosopher table initialisation failed!\n", 1));
 	create_philos(first_philo);
 	parent_wait_philos(first_philo);
-	sem_close(first_philo->params->death);
-	sem_close(first_philo->params->fork);
-	sem_unlink(SEM_DEATH);
-	sem_unlink(SEM_FORK);
-	free(first_philo);
+	clean_up(first_philo, first_philo);
 	return (0);
 }

@@ -51,8 +51,10 @@ void	init_params(t_params *params, char **av)
 	params->stop = 0;
 	sem_unlink(SEM_FORK);
 	sem_unlink(SEM_DEATH);
+	sem_unlink(SEM_ARBITRE);
 	params->fork = sem_open(SEM_FORK, O_CREAT, 0644, params->philo_nbr);
 	params->death = sem_open(SEM_DEATH, O_CREAT, 0644, 1);
+	params->arbitrator = sem_open(SEM_ARBITRE, O_CREAT, 0644, 1);
 }
 
 int	main(int ac, char **av)

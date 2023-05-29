@@ -23,8 +23,9 @@
 # include <sys/stat.h>
 # include <sys/wait.h>
 
-# define SEM_FORK ("/fork")
+# define SEM_FORK ("/FORK")
 # define SEM_DEATH ("/DEATH")
+# define SEM_ARBITRE ("/ARBITRE")
 
 typedef enum e_status
 {
@@ -45,6 +46,7 @@ typedef struct s_params
 	int				stop;
 	sem_t			*fork;
 	sem_t			*death;
+	sem_t			*arbitrator;
 }	t_params;
 
 typedef struct s_philo
@@ -70,7 +72,7 @@ int				solve_philosopher(t_params *params);
 void			log_philo_msg(t_philo *philo, char *str);
 long			get_timestamp_us(void);
 void			philosopher_go(t_philo *philo);
-int				ph_go_dead(t_philo *philo, long ts);
+int				ph_go_dead(t_philo *philo);
 int				ph_go_thinking(t_philo *philo, long ts);
 int				ph_go_eating(t_philo *philo, long ts);
 int				ph_go_sleeping(t_philo *philo, long ts);
@@ -82,5 +84,5 @@ void			drop_forks(t_philo *philo);
 int				safe_usleep(t_philo *philo, long to_ts);
 void			log_philo_status(t_philo *philo);
 void			log_philo_msg_ts(t_philo *philo, char *str, long ts);
-
+void			clean_up(t_philo *philo, t_philo *first);
 #endif

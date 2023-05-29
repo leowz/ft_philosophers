@@ -16,8 +16,10 @@ void	clean_up(t_philo *philo, t_philo *first)
 {
 	sem_close(philo->params->death);
 	sem_close(philo->params->fork);
+	sem_close(philo->params->arbitrator);
 	sem_unlink(SEM_DEATH);
 	sem_unlink(SEM_FORK);
+	sem_unlink(SEM_ARBITRE);
 	free(first);
 }
 
